@@ -77,12 +77,21 @@ public class Piece {
     public static Piece A2;
     public static Piece A3;
     public static Piece A4;
+    public static Piece A5;
+    public static Piece A6;
+    public static Piece A7;
+    public static Piece A8;
 
     static {
         A1 = new Piece(TYPE_A, new Point(2, 0), new Point(0, 1), new Point(1, 1), new Point(2, 1));
         A2 = A1.rotate(90);
         A3 = A2.rotate(90);
         A4 = A3.rotate(90);
+        A5 = A1.flip();
+        A6 = A5.rotate(90);
+        A7 = A6.rotate(90);
+        A8 = A7.rotate(90);
+
     }
 
     private int pieceNumber;
@@ -108,6 +117,15 @@ public class Piece {
 
     public Piece rotate(int degree) {
         List<Point> newPoints = points.stream().map((point) -> point.rotate(degree)).collect(Collectors.toList());
+        Point leftTop = findLeftTopPoint(newPoints);
+        Point offset = new Point(0 - leftTop.getX(), 0 - leftTop.getY());
+        newPoints = newPoints.stream().map((point) -> point.move(offset)).collect(Collectors.toList());
+
+        return new Piece(getPieceNumber(), newPoints);
+    }
+
+    public Piece flip() {
+        List<Point> newPoints = points.stream().map(Point::flip).collect(Collectors.toList());
         Point leftTop = findLeftTopPoint(newPoints);
         Point offset = new Point(0 - leftTop.getX(), 0 - leftTop.getY());
         newPoints = newPoints.stream().map((point) -> point.move(offset)).collect(Collectors.toList());

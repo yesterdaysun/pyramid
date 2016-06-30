@@ -26,6 +26,10 @@ public class Point {
         return new Point(newX, newY);
     }
 
+    public Point flip() {
+        return new Point(x, -y);
+    }
+
     public Point move(Point offset) {
         return new Point(x + offset.getX(), y + offset.getY());
     }
