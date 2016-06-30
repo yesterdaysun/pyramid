@@ -2,6 +2,7 @@ import org.junit.Test;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -33,5 +34,18 @@ public class TestPyramid {
         assertEquals(Piece.TYPE_A, board.getCell(0, 1).getPieceNumber());
         assertEquals(Piece.TYPE_A, board.getCell(1, 1).getPieceNumber());
         assertEquals(Piece.TYPE_A, board.getCell(2, 1).getPieceNumber());
+    }
+
+    @Test
+    public void put_a_piece_out_of_board() {
+        boolean result = pyramid.put(Piece.A1, 0, 9);
+
+        assertFalse(result);
+    }
+
+    @Test
+    public void put_two_pieces_overlap_on_board() {
+        assertTrue(pyramid.put(Piece.A1, 0, 0));
+        assertFalse(pyramid.put(Piece.A1, 0, 1));
     }
 }
