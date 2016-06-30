@@ -1,11 +1,29 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 /**
  * Created by Eric on 16/6/30.
  */
 public class Board {
+    public static final Map<Integer, String> PieceCodes = new HashMap<Integer, String>() {{
+        put(0, "_");
+        put(1, "A");
+        put(2, "B");
+        put(3, "C");
+        put(4, "D");
+        put(5, "E");
+        put(6, "F");
+        put(7, "G");
+        put(8, "H");
+        put(9, "I");
+        put(10, "J");
+        put(11, "K");
+        put(12, "L");
+    }};
+
     private List<List<Cell>> cells = new ArrayList<>();
 
     public Board() {
@@ -50,5 +68,17 @@ public class Board {
             }
         }
         return false;
+    }
+
+    public void print() {
+        for (int i = 0; i < 10; i++) {
+            for (int k = 0; k < (10 - i) * 2; k++) {
+                System.out.print(" ");
+            }
+            for (int j = 0; j <= i; j++) {
+                System.out.print(String.format(" %s  ", PieceCodes.get(cells.get(i - j).get(j).getPieceNumber())));
+            }
+            System.out.println();
+        }
     }
 }

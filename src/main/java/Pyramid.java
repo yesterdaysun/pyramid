@@ -11,4 +11,8 @@ public class Pyramid {
     public boolean put(Piece piece, int col, int row) {
         return board.put(piece, col, row);
     }
+
+    public void print() {
+        board.print();
+    }
 }
