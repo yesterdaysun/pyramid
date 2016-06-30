@@ -21,4 +21,34 @@ public class Board {
     public void eachCell(Consumer<Cell> consumer) {
         cells.forEach((row) -> row.forEach(consumer::accept));
     }
+
+    public Cell getCell(int col, int row) {
+        return cells.get(row).get(col);
+    }
+
+    public boolean put(Piece piece, int col, int row) {
+        if (piece.getPoints().stream().allMatch((point) -> isValid(col + point.getX(), row + point.getY()))) {
+            putWithoutCheck(piece, col, row);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private void putWithoutCheck(Piece piece, int col, int row) {
+        Point offset = new Point(col, row);
+        piece.getPoints().stream()
+                .map((point -> point.move(offset)))
+                .forEach((point) -> cells.get(point.getY()).get(point.getX()).setPieceNumber(piece.getPieceNumber()));
+    }
+
+    private boolean isValid(int col, int row) {
+        if (0 <= row && row < cells.size()) {
+            List<Cell> cellRow = this.cells.get(row);
+            if (0 <= col && col < cellRow.size()) {
+                return cellRow.get(col).getPieceNumber() == 0;
+            }
+        }
+        return false;
+    }
 }

@@ -3,6 +3,7 @@ import org.junit.Test;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by Eric on 16/6/30.
@@ -20,5 +21,17 @@ public class TestPyramid {
         });
 
         assertEquals(55, count.get());
+    }
+
+    @Test
+    public void put_a_piece_on_board() {
+        boolean result = pyramid.put(Piece.A1, 0, 0);
+        Board board = pyramid.getBoard();
+
+        assertTrue(result);
+        assertEquals(Piece.TYPE_A, board.getCell(2, 0).getPieceNumber());
+        assertEquals(Piece.TYPE_A, board.getCell(0, 1).getPieceNumber());
+        assertEquals(Piece.TYPE_A, board.getCell(1, 1).getPieceNumber());
+        assertEquals(Piece.TYPE_A, board.getCell(2, 1).getPieceNumber());
     }
 }

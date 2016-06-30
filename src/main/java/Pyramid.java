@@ -7,4 +7,8 @@ public class Pyramid {
     public Board getBoard() {
         return board;
     }
+
+    public boolean put(Piece piece, int col, int row) {
+        return board.put(piece, col, row);
+    }
 }

@@ -111,6 +111,10 @@ public class Piece {
         return pieceNumber;
     }
 
+    public List<Point> getPoints() {
+        return points;
+    }
+
     public void eachPoint(Consumer<Point> consumer) {
         points.forEach(consumer);
     }
