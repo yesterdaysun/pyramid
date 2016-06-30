@@ -21,8 +21,7 @@ public class TestPiece {
         Piece piece = new Piece(1, new Point(2, 3));
 
         piece.eachPoint((point) -> {
-            assertEquals(2, point.getX());
-            assertEquals(3, point.getY());
+            assertPoint(2, 3, point);
         });
     }
 
@@ -34,11 +33,28 @@ public class TestPiece {
         piece.eachPoint(points::add);
 
         assertEquals(2, points.size());
+        assertPoint(1, 3, points.get(0));
+        assertPoint(2, 2, points.get(1));
+    }
 
-        assertEquals(1, points.get(0).getX());
-        assertEquals(3, points.get(0).getY());
+    @Test
+    public void create_a_predefined_piece() {
+        Piece piece = Piece.A1;
 
-        assertEquals(2, points.get(1).getX());
-        assertEquals(2, points.get(1).getY());
+        List<Point> points = new ArrayList<>();
+        piece.eachPoint(points::add);
+
+        assertEquals(Piece.TYPE_A, piece.getPieceNumber());
+        assertEquals(4, points.size());
+
+        assertPoint(2, 0, points.get(0));
+        assertPoint(0, 1, points.get(1));
+        assertPoint(1, 1, points.get(2));
+        assertPoint(2, 1, points.get(3));
+    }
+
+    private void assertPoint(int expectedX, int expectedY, Point point) {
+        assertEquals(expectedX, point.getX());
+        assertEquals(expectedY, point.getY());
     }
 }
