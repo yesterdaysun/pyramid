@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 /**
@@ -90,6 +91,14 @@ public class Board {
         if (isStart) {
             result.set(0, true);
         }
+        AtomicInteger current = new AtomicInteger(13);
+        eachCell(cell -> {
+            if (cell.getPieceNumber() != Piece.TYPE_EMPTY) {
+                result.set(cell.getPieceNumber(), true);
+                result.set(current.get(), true);
+            }
+            current.incrementAndGet();
+        });
         return result;
 
     }
