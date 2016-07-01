@@ -7,11 +7,10 @@ import java.util.function.Consumer;
 public class DancingLink {
     private ColumnDancingNode head;
     private Stack<DancingNode> answers = new Stack<>();
-    private final List<ColumnDancingNode> columns;
 
     public DancingLink(List<List<Boolean>> input) {
         head = new ColumnDancingNode(-1);
-        columns = new ArrayList<>();
+        List<ColumnDancingNode> columns = new ArrayList<>();
 
         if (input.size() > 0) {
             int len = input.get(0).size();
@@ -57,9 +56,38 @@ public class DancingLink {
     }
 
     private boolean solve(Consumer<List<Integer>> consumer) {
-        if (head.empty()) {
+        if (head.emptyInRow()) {
             return true;
         }
+        ColumnDancingNode processColumn = findTopPriorityColumn();
+        if (processColumn.emptyInCol()) {
+            return false;
+        }
+        List<DancingNode> candidate = processColumn.remove();
+        for (DancingNode node : candidate) {
+            answers.push(node);
+            consumer.accept(buildAnswers());
+
+            Stack<DancingNode> conflict = new Stack<>();
+            node.eachColWithoutThis((colNode) -> {
+                conflict.push(colNode.getHead());
+                colNode.getHead().remove();
+            });
+            if (solve(consumer)) {
+                return true;
+            } else {
+                while (!conflict.empty()) {
+                    conflict.pop().rollback();
+                }
+                answers.pop();
+//                consumer.accept(buildAnswers());
+            }
+        }
+        processColumn.rollback();
+        return false;
+    }
+
+    private ColumnDancingNode findTopPriorityColumn() {
         ColumnDancingNode nextCol = (ColumnDancingNode) head.getRight();
         ColumnDancingNode minColumn = nextCol;
         while (nextCol != head) {
@@ -68,37 +96,7 @@ public class DancingLink {
             }
             nextCol = (ColumnDancingNode) nextCol.getRight();
         }
-
-        nextCol = minColumn;
-        DancingNode nextRow = nextCol.getDown();
-        if (nextRow == nextCol) {
-            return false;
-        }
-        Stack<DancingNode> candidate = nextCol.remove();
-        for (DancingNode node : candidate) {
-            answers.push(node);
-            consumer.accept(buildAnswers());
-
-            Stack<DancingNode> conflict = new Stack<>();
-            node.eachCol((colNode) -> {
-                if (colNode.getHead() != node.getHead()) {
-                    conflict.push(colNode.getHead());
-                    colNode.getHead().remove();
-                }
-            });
-            if (solve(consumer)) {
-                return true;
-            } else {
-                while (!conflict.empty()) {
-                    DancingNode conflictNode = conflict.pop();
-                    conflictNode.rollback();
-                }
-                answers.pop();
-//                consumer.accept(buildAnswers());
-            }
-        }
-        nextCol.rollback();
-        return false;
+        return minColumn;
     }
 
     private List<Integer> buildAnswers() {

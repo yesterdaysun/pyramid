@@ -1,8 +1,10 @@
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * Created by Eric on 16/7/1.
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class ColumnDancingNode extends DancingNode {
     private int count = 0;

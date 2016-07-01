@@ -1,6 +1,7 @@
 import lombok.Data;
 
-import java.util.Stack;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 @Data
@@ -31,9 +32,14 @@ public class DancingNode {
         return String.format("%d %d", col + 1, row + 1);
     }
 
-    public boolean empty() {
+    public boolean emptyInRow() {
         return getRight() == this;
     }
+
+    public boolean emptyInCol() {
+        return getRight() == this;
+    }
+
 
     public void appendRight(DancingNode node) {
         DancingNode next = getRight();
@@ -51,7 +57,7 @@ public class DancingNode {
         node.setDown(next);
     }
 
-    public void eachRow(Consumer<DancingNode> consumer) {
+    public void eachRowWithoutThis(Consumer<DancingNode> consumer) {
         DancingNode next = getDown();
         while (next != this) {
             consumer.accept(next);
@@ -59,7 +65,7 @@ public class DancingNode {
         }
     }
 
-    public void eachCol(Consumer<DancingNode> consumer) {
+    public void eachColWithoutThis(Consumer<DancingNode> consumer) {
         DancingNode next = getRight();
         while (next != this) {
             consumer.accept(next);
@@ -67,14 +73,21 @@ public class DancingNode {
         }
     }
 
-    public Stack<DancingNode> remove() {
-        Stack<DancingNode> result = new Stack<>();
+    public List<DancingNode> remove() {
+        List<DancingNode> result = new ArrayList<>();
         removeFromRow();
-        eachRow((node) -> {
-            result.push(node);
-            node.eachCol(DancingNode::removeFromCol);
+        eachRowWithoutThis((node) -> {
+            result.add(node);
+            node.eachColWithoutThis(DancingNode::removeFromCol);
         });
         return result;
+    }
+
+    public void rollback() {
+        rollbackInRow();
+        eachRowWithoutThis((node) -> {
+            node.eachColWithoutThis(DancingNode::rollbackInCol);
+        });
     }
 
     public void removeFromRow() {
@@ -105,12 +118,5 @@ public class DancingNode {
         previous.setDown(this);
         next.setUp(this);
         getHead().increase();
-    }
-
-    public void rollback() {
-        rollbackInRow();
-        eachRow((node) -> {
-            node.eachCol(DancingNode::rollbackInCol);
-        });
     }
 }

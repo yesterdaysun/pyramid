@@ -1,4 +1,6 @@
 import java.io.IOException;
+import java.util.Date;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -24,35 +26,34 @@ public class Application {
         moveCursorToLetTop();
         pyramid.print();
 
-//        Date startTime = new Date();
+        Date startTime = new Date();
 
         AtomicInteger count = new AtomicInteger(0);
-        pyramid.solve(answers -> {
+        Set<Step> solution = pyramid.solve(answers -> {
             count.incrementAndGet();
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            Board board = new Board();
-            board.put(Piece.B6, 0, 0);
-            board.put(Piece.H4, 0, 2);
-            answers.forEach(step -> {
-                board.put(step.getPiece(), step.getCol(), step.getRow());
-            });
-            moveCursorToLetTop();
-            board.print();
+//            try {
+//                Thread.sleep(100);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//            Board board = new Board();
+//            board.put(Piece.B6, 0, 0);
+//            board.put(Piece.H4, 0, 2);
+//            answers.forEach(step -> {
+//                board.put(step.getPiece(), step.getCol(), step.getRow());
+//            });
+//            moveCursorToLetTop();
+//            board.print();
         });
+        Date endTime = new Date();
+
+        solution.forEach(pyramid::put);
+        moveCursorToLetTop();
+        pyramid.print();
 
         System.out.println();
-        System.out.println(String.format("Tries: %d times.", count.get()));
-
-//        Date endTime = new Date();
-
-//        moveCursorToLetTop();
-//        pyramid.print();
-
-//        System.out.println(String.format("\nUsed: %.2f s", (endTime.getTime() - startTime.getTime()) / 1000.0));
+        System.out.println(String.format("Tried %d times.", count.get()));
+        System.out.println(String.format("\nUsed: %.2f s", (endTime.getTime() - startTime.getTime()) / 1000.0));
     }
 
     private static void moveCursorToLetTop() {
