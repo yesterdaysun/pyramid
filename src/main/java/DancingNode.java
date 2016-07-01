@@ -5,13 +5,13 @@ import java.util.function.Consumer;
 
 @Data
 public class DancingNode {
-    private DancingNode head;
-    private DancingNode up;
-    private DancingNode down;
-    private DancingNode left;
-    private DancingNode right;
-    private int col;
-    private int row;
+    protected ColumnDancingNode head;
+    protected DancingNode up;
+    protected DancingNode down;
+    protected DancingNode left;
+    protected DancingNode right;
+    protected int col;
+    protected int row;
 
     public DancingNode() {
         this(-1, -1);
@@ -28,11 +28,11 @@ public class DancingNode {
 
     @Override
     public String toString() {
-        if (row == -1) {
-            return String.format("C%d", col + 1);
-        } else {
-            return String.format("%d %d", col + 1, row + 1);
-        }
+        return String.format("%d %d", col + 1, row + 1);
+    }
+
+    public boolean empty() {
+        return getRight() == this;
     }
 
     public void appendRight(DancingNode node) {
@@ -96,6 +96,7 @@ public class DancingNode {
         DancingNode next = getDown();
         previous.setDown(next);
         next.setUp(previous);
+        getHead().decrease();
     }
 
     public void rollbackInCol() {
@@ -103,6 +104,7 @@ public class DancingNode {
         DancingNode next = getDown();
         previous.setDown(this);
         next.setUp(this);
+        getHead().increase();
     }
 
     public void rollback() {

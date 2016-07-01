@@ -4,19 +4,19 @@ import java.util.*;
  * Created by Eric on 16/6/30.
  */
 public class DancingLink {
-    private DancingNode head;
-    private List<DancingNode> columns;
+    private ColumnDancingNode head;
     private Stack<DancingNode> answers = new Stack<>();
+    private final List<ColumnDancingNode> columns;
 
     public DancingLink(List<List<Boolean>> input) {
-        head = new DancingNode();
+        head = new ColumnDancingNode(-1);
         columns = new ArrayList<>();
 
         if (input.size() > 0) {
             int len = input.get(0).size();
             DancingNode current = head;
             for (int i = 0; i < len; i++) {
-                DancingNode next = new DancingNode(i, -1);
+                ColumnDancingNode next = new ColumnDancingNode(i);
                 columns.add(next);
                 current.appendRight(next);
                 current = next;
@@ -28,8 +28,9 @@ public class DancingLink {
                 for (int col = 0; col < len; col++) {
                     if (cellRow.get(col)) {
                         DancingNode next = new DancingNode(col, row);
-                        columns.get(col).appendDown(next);
-                        next.setHead(columns.get(col));
+                        ColumnDancingNode head = columns.get(col);
+                        head.appendDown(next);
+                        next.setHead(head);
                         if (current != null) {
                             current.appendRight(next);
                         }
@@ -50,10 +51,19 @@ public class DancingLink {
     }
 
     private boolean solve() {
-        DancingNode nextCol = head.getRight();
-        if (nextCol == head) {
+        if (head.empty()) {
             return true;
         }
+        ColumnDancingNode nextCol = (ColumnDancingNode) head.getRight();
+        ColumnDancingNode minColumn = nextCol;
+        while (nextCol != head) {
+            if (minColumn.getCount() > nextCol.getCount()) {
+                minColumn = nextCol;
+            }
+            nextCol = (ColumnDancingNode) nextCol.getRight();
+        }
+
+        nextCol = minColumn;
         DancingNode nextRow = nextCol.getDown();
         if (nextRow == nextCol) {
             return false;
