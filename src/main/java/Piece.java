@@ -1,5 +1,4 @@
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -144,6 +143,8 @@ public class Piece {
     public static Piece K;
 
     public static Piece L;
+
+    public static Map<Integer, List<Piece>> PieceMap;
 
     static {
         //     A
@@ -381,6 +382,22 @@ public class Piece {
         // L L L
         //   L
         L = new Piece(TYPE_L, new Point(1, 0), new Point(0, 1), new Point(1, 1), new Point(2, 1), new Point(1, 2));
+
+        PieceMap = new HashMap<Integer, List<Piece>>() {{
+            put(0, Collections.emptyList());
+            put(1, Arrays.asList(A1, A2, A3, A4, A5, A6, A7, A8));
+            put(2, Arrays.asList(B1, B2, B3, B4, B5, B6, B7, B8));
+            put(3, Arrays.asList(C1, C2, C3, C4, C5, C6, C7, C8));
+            put(4, Arrays.asList(D1, D2, D3, D4, D5, D6, D7, D8));
+            put(5, Arrays.asList(E1, E2, E3, E4, E5, E6, E7, E8));
+            put(6, Arrays.asList(F1, F2, F3, F4));
+            put(7, Arrays.asList(G1, G2, G3, G4));
+            put(8, Arrays.asList(H1, H2, H3, H4));
+            put(9, Arrays.asList(I1, I2, I3, I4));
+            put(10, Arrays.asList(J1, J2));
+            put(11, Arrays.asList(K));
+            put(11, Arrays.asList(L));
+        }};
     }
 
     private int pieceNumber;

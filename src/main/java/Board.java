@@ -81,4 +81,16 @@ public class Board {
             System.out.println();
         }
     }
+
+    public List<Boolean> buildStateList(boolean isStart) {
+        List<Boolean> result = new ArrayList<>();
+        for (int i = 0; i < 68; i++) {
+            result.add(false);
+        }
+        if (isStart) {
+            result.set(0, true);
+        }
+        return result;
+
+    }
 }
