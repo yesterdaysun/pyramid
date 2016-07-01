@@ -14,7 +14,7 @@ public class DancingNode {
     private int row;
 
     public DancingNode() {
-        this(0, 0);
+        this(-1, -1);
     }
 
     public DancingNode(int col, int row) {
@@ -26,8 +26,13 @@ public class DancingNode {
         setDown(this);
     }
 
-    public boolean isEmpty() {
-        return this == right;
+    @Override
+    public String toString() {
+        if (row == -1) {
+            return String.format("C%d", col + 1);
+        } else {
+            return String.format("%d %d", col + 1, row + 1);
+        }
     }
 
     public void appendRight(DancingNode node) {
