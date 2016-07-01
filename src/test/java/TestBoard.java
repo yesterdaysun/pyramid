@@ -34,4 +34,25 @@ public class TestBoard {
         assertTrue(result.get(24));
         assertTrue(result.get(25));
     }
+
+    @Test
+    public void build_state_list_two_piece(){
+        Board board = new Board();
+
+        board.put(Piece.A1,0,0);
+        board.put(Piece.F1,8,0);
+        List<Boolean> result = board.buildStateList(true);
+
+        assertTrue(result.get(0));
+        assertTrue(result.get(Piece.TYPE_A));
+        assertTrue(result.get(15));
+        assertTrue(result.get(23));
+        assertTrue(result.get(24));
+        assertTrue(result.get(25));
+
+        assertTrue(result.get(Piece.TYPE_F));
+        assertTrue(result.get(21));
+        assertTrue(result.get(22));
+        assertTrue(result.get(31));
+    }
 }
