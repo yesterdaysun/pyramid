@@ -262,15 +262,15 @@ public class Piece {
         // D D
         // D
         // D
-        D6 = D2.rotate(90);
+        D6 = D5.rotate(90);
         // D D D D
         //     D
-        D7 = D3.rotate(90);
+        D7 = D6.rotate(90);
         //   D
         //   D
         // D D
         //   D
-        D8 = D4.rotate(90);
+        D8 = D7.rotate(90);
 
         // E E E
         //     E E
@@ -397,7 +397,7 @@ public class Piece {
             put(9, Arrays.asList(I1, I2, I3, I4));
             put(10, Arrays.asList(J1, J2));
             put(11, Arrays.asList(K));
-            put(11, Arrays.asList(L));
+            put(12, Arrays.asList(L));
         }};
     }
 

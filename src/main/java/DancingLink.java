@@ -40,7 +40,7 @@ public class DancingLink {
         }
     }
 
-    public Set<Integer> getAnswer() {
+    public Set<Integer> getAnswers() {
         solve();
         Set<Integer> result = new HashSet<>();
         while (!answers.empty()) {

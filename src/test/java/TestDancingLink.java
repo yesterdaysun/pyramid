@@ -13,7 +13,7 @@ public class TestDancingLink {
         List<List<Boolean>> input = new ArrayList<>();
         DancingLink dancingLink = new DancingLink(input);
 
-        Set<Integer> solution = dancingLink.getAnswer();
+        Set<Integer> solution = dancingLink.getAnswers();
 
         assertTrue(solution.isEmpty());
     }
@@ -23,7 +23,7 @@ public class TestDancingLink {
         List<List<Boolean>> input = Arrays.asList(Arrays.asList(true));
 
         DancingLink dancingLink = new DancingLink(input);
-        Set<Integer> solution = dancingLink.getAnswer();
+        Set<Integer> solution = dancingLink.getAnswers();
 
         assertArrayEquals(new Integer[]{0}, solution.toArray());
     }
@@ -36,7 +36,7 @@ public class TestDancingLink {
         );
 
         DancingLink dancingLink = new DancingLink(input);
-        Set<Integer> solution = dancingLink.getAnswer();
+        Set<Integer> solution = dancingLink.getAnswers();
 
         assertEquals(expectedAnswer(0), solution);
     }
@@ -49,7 +49,7 @@ public class TestDancingLink {
         );
 
         DancingLink dancingLink = new DancingLink(input);
-        Set<Integer> solution = dancingLink.getAnswer();
+        Set<Integer> solution = dancingLink.getAnswers();
 
         assertEquals(expectedAnswer(0, 1), solution);
     }
@@ -66,7 +66,7 @@ public class TestDancingLink {
         );
 
         DancingLink dancingLink = new DancingLink(input);
-        Set<Integer> solution = dancingLink.getAnswer();
+        Set<Integer> solution = dancingLink.getAnswers();
         assertEquals(expectedAnswer(0, 3, 4), solution);
     }
 

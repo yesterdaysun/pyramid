@@ -17,6 +17,10 @@ public class Pyramid {
         return board.put(piece, col, row);
     }
 
+    public boolean put(Step step) {
+        return board.put(step.getPiece(), step.getCol(), step.getRow());
+    }
+
     public void print() {
         board.print();
     }
@@ -26,7 +30,27 @@ public class Pyramid {
 
         List<Piece> pendingPieces = new ArrayList<>();
         findMissingPieceNumbers().forEach(number -> pendingPieces.addAll(Piece.PieceMap.get(number)));
-        board.buildStateList(true);
+
+        List<List<Boolean>> stateMatrix = new ArrayList<>();
+        ArrayList<Step> solutionList = new ArrayList<>();
+        stateMatrix.add(board.buildStateList(true));
+        solutionList.add(new Step(null, 0, 0));
+        pendingPieces.forEach((piece) -> {
+            for (int col = 0; col < 10; col++) {
+                for (int row = 0; row < 10 - col; row++) {
+                    Board draftBoard = new Board();
+                    if (draftBoard.put(piece, col, row)) {
+                        stateMatrix.add(draftBoard.buildStateList(false));
+                        solutionList.add(new Step(piece, col, row));
+                    }
+                }
+            }
+        });
+
+        DancingLink dancingLink = new DancingLink(stateMatrix);
+        Set<Integer> answers = dancingLink.getAnswers();
+        answers.remove(0);
+        answers.forEach(answer -> steps.add(solutionList.get(answer)));
 
         return steps;
     }
