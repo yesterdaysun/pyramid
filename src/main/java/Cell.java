@@ -13,4 +13,10 @@ public class Cell {
     private int col;
     private int row;
     private int pieceNumber = 0;
+
+    public Cell(Cell other) {
+        this.col = other.col;
+        this.row = other.row;
+        this.pieceNumber = other.pieceNumber;
+    }
 }

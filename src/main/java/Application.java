@@ -8,8 +8,41 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class Application {
     public static void main(String[] args) throws IOException {
-        clearConsole();
+        Pyramid pyramid = buildPuzzle355();
 
+        clearConsole();
+        moveCursorToLetTop();
+        pyramid.print();
+
+        Date startTime = new Date();
+
+        AtomicInteger count = new AtomicInteger(0);
+        Set<Step> solution = pyramid.solve(answers -> {
+            count.incrementAndGet();
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            Board board = new Board(pyramid.getBoard());
+            answers.forEach(step -> {
+                board.put(step.getPiece(), step.getCol(), step.getRow());
+            });
+            moveCursorToLetTop();
+            board.print();
+        });
+        Date endTime = new Date();
+
+        solution.forEach(pyramid::put);
+        moveCursorToLetTop();
+        pyramid.print();
+
+        System.out.println();
+        System.out.println(String.format("Tried %d times.", count.get()));
+        System.out.println(String.format("\nUsed: %.2f s", (endTime.getTime() - startTime.getTime()) / 1000.0));
+    }
+
+    private static Pyramid buildPuzzle355() {
         // puzzle 355
         Pyramid pyramid = new Pyramid();
         pyramid.put(Piece.B6, 0, 0);
@@ -22,38 +55,7 @@ public class Application {
 //        pyramid.put(Piece.F1, 0, 8);
 //        pyramid.put(Piece.K, 4, 3);
 //        pyramid.put(Piece.D7, 4, 2);
-
-        moveCursorToLetTop();
-        pyramid.print();
-
-        Date startTime = new Date();
-
-        AtomicInteger count = new AtomicInteger(0);
-        Set<Step> solution = pyramid.solve(answers -> {
-            count.incrementAndGet();
-//            try {
-//                Thread.sleep(100);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//            Board board = new Board();
-//            board.put(Piece.B6, 0, 0);
-//            board.put(Piece.H4, 0, 2);
-//            answers.forEach(step -> {
-//                board.put(step.getPiece(), step.getCol(), step.getRow());
-//            });
-//            moveCursorToLetTop();
-//            board.print();
-        });
-        Date endTime = new Date();
-
-        solution.forEach(pyramid::put);
-        moveCursorToLetTop();
-        pyramid.print();
-
-        System.out.println();
-        System.out.println(String.format("Tried %d times.", count.get()));
-        System.out.println(String.format("\nUsed: %.2f s", (endTime.getTime() - startTime.getTime()) / 1000.0));
+        return pyramid;
     }
 
     private static void moveCursorToLetTop() {

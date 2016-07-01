@@ -37,6 +37,17 @@ public class Board {
         }
     }
 
+    public Board (Board other){
+        for (int row = 0; row < 10; row++) {
+            List<Cell> cellRow = new ArrayList<>();
+            for (int col = 0; col < 10 - row; col++) {
+                Cell otherCell = other.cells.get(row).get(col);
+                cellRow.add(new Cell(otherCell));
+            }
+            cells.add(cellRow);
+        }
+    }
+
     public void eachCell(Consumer<Cell> consumer) {
         cells.forEach((row) -> row.forEach(consumer::accept));
     }
@@ -100,6 +111,5 @@ public class Board {
             current.incrementAndGet();
         });
         return result;
-
     }
 }

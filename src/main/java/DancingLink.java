@@ -68,16 +68,16 @@ public class DancingLink {
             answers.push(node);
             consumer.accept(buildAnswers());
 
-            Stack<DancingNode> conflict = new Stack<>();
+            Stack<DancingNode> conflicts = new Stack<>();
             node.eachColWithoutThis((colNode) -> {
-                conflict.push(colNode.getHead());
+                conflicts.push(colNode.getHead());
                 colNode.getHead().remove();
             });
             if (solve(consumer)) {
                 return true;
             } else {
-                while (!conflict.empty()) {
-                    conflict.pop().rollback();
+                while (!conflicts.empty()) {
+                    conflicts.pop().rollback();
                 }
                 answers.pop();
 //                consumer.accept(buildAnswers());
