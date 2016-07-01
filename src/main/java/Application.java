@@ -1,12 +1,13 @@
-import org.apache.commons.lang3.time.StopWatch;
-
-import java.util.Set;
+import java.io.IOException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by Eric on 16/6/30.
  */
 public class Application {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        clearConsole();
+
         // puzzle 355
         Pyramid pyramid = new Pyramid();
         pyramid.put(Piece.B6, 0, 0);
@@ -20,15 +21,49 @@ public class Application {
 //        pyramid.put(Piece.K, 4, 3);
 //        pyramid.put(Piece.D7, 4, 2);
 
-        pyramid.print();
-        StopWatch stopWatch = new StopWatch();
-        stopWatch.start();
-        Set<Step> solve = pyramid.solve();
-        stopWatch.stop();
-        solve.forEach(pyramid::put);
+        moveCursorToLetTop();
         pyramid.print();
 
-        System.out.println(String.format("\nUsed: %.2f s", stopWatch.getTime() / 1000.0));
+//        Date startTime = new Date();
+
+        AtomicInteger count = new AtomicInteger(0);
+        pyramid.solve(answers -> {
+            count.incrementAndGet();
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            Board board = new Board();
+            board.put(Piece.B6, 0, 0);
+            board.put(Piece.H4, 0, 2);
+            answers.forEach(step -> {
+                board.put(step.getPiece(), step.getCol(), step.getRow());
+            });
+            moveCursorToLetTop();
+            board.print();
+        });
+
+        System.out.println();
+        System.out.println(String.format("Tries: %d times.", count.get()));
+
+//        Date endTime = new Date();
+
+//        moveCursorToLetTop();
+//        pyramid.print();
+
+//        System.out.println(String.format("\nUsed: %.2f s", (endTime.getTime() - startTime.getTime()) / 1000.0));
+    }
+
+    private static void moveCursorToLetTop() {
+        System.out.print(String.format("%c[%d;%df", 0x1B, 0, 0));
+    }
+
+    private static void clearConsole() {
+        moveCursorToLetTop();
+        for (int i = 0; i < 15; i++) {
+            System.out.println("                                                                                ");
+        }
     }
 
     private static void printSample() {

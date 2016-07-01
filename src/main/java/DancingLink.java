@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * Created by Eric on 16/6/30.
@@ -42,7 +43,12 @@ public class DancingLink {
     }
 
     public Set<Integer> getAnswers() {
-        solve();
+        return getAnswers(ignore -> {
+        });
+    }
+
+    public Set<Integer> getAnswers(Consumer<List<Integer>> consumer) {
+        solve(consumer);
         Set<Integer> result = new HashSet<>();
         while (!answers.empty()) {
             result.add(answers.pop().getRow());
@@ -50,7 +56,7 @@ public class DancingLink {
         return result;
     }
 
-    private boolean solve() {
+    private boolean solve(Consumer<List<Integer>> consumer) {
         if (head.empty()) {
             return true;
         }
@@ -71,6 +77,7 @@ public class DancingLink {
         Stack<DancingNode> candidate = nextCol.remove();
         for (DancingNode node : candidate) {
             answers.push(node);
+            consumer.accept(buildAnswers());
 
             Stack<DancingNode> conflict = new Stack<>();
             node.eachCol((colNode) -> {
@@ -79,7 +86,7 @@ public class DancingLink {
                     colNode.getHead().remove();
                 }
             });
-            if (solve()) {
+            if (solve(consumer)) {
                 return true;
             } else {
                 while (!conflict.empty()) {
@@ -87,10 +94,17 @@ public class DancingLink {
                     conflictNode.rollback();
                 }
                 answers.pop();
+//                consumer.accept(buildAnswers());
             }
         }
         nextCol.rollback();
         return false;
+    }
+
+    private List<Integer> buildAnswers() {
+        List<Integer> result = new ArrayList<>();
+        answers.forEach(answer -> result.add(answer.getRow()));
+        return result;
     }
 }
 

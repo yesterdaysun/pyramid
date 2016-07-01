@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 
 /**
  * Created by Eric on 16/6/30.
@@ -26,6 +27,11 @@ public class Pyramid {
     }
 
     public Set<Step> solve() {
+        return solve(ignore -> {
+        });
+    }
+
+    public Set<Step> solve(Consumer<Set<Step>> consumer) {
         HashSet<Step> steps = new HashSet<>();
 
         List<Piece> pendingPieces = new ArrayList<>();
@@ -48,7 +54,12 @@ public class Pyramid {
         });
 
         DancingLink dancingLink = new DancingLink(stateMatrix);
-        Set<Integer> answers = dancingLink.getAnswers();
+        Set<Integer> answers = dancingLink.getAnswers(midAnswers -> {
+            midAnswers.remove(0);
+            HashSet<Step> midSteps = new HashSet<>();
+            midAnswers.forEach(midAnswer -> midSteps.add(solutionList.get(midAnswer)));
+            consumer.accept(midSteps);
+        });
         answers.remove(0);
         answers.forEach(answer -> steps.add(solutionList.get(answer)));
 
