@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.util.Date;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -8,7 +9,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class Application {
     public static void main(String[] args) throws IOException {
-        Pyramid pyramid = buildPuzzle355();
+        Pyramid pyramid = buildPuzzle325();
+        AtomicBoolean animation = new AtomicBoolean(false);
 
         clearConsole();
         moveCursorToLetTop();
@@ -19,17 +21,19 @@ public class Application {
         AtomicInteger count = new AtomicInteger(0);
         Set<Step> solution = pyramid.solve(answers -> {
             count.incrementAndGet();
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            if (animation.get()) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                Board board = new Board(pyramid.getBoard());
+                answers.forEach(step -> {
+                    board.put(step.getPiece(), step.getCol(), step.getRow());
+                });
+                moveCursorToLetTop();
+                board.print();
             }
-            Board board = new Board(pyramid.getBoard());
-            answers.forEach(step -> {
-                board.put(step.getPiece(), step.getCol(), step.getRow());
-            });
-            moveCursorToLetTop();
-            board.print();
         });
         Date endTime = new Date();
 
@@ -55,6 +59,13 @@ public class Application {
 //        pyramid.put(Piece.F1, 0, 8);
 //        pyramid.put(Piece.K, 4, 3);
 //        pyramid.put(Piece.D7, 4, 2);
+        return pyramid;
+    }
+
+    private static Pyramid buildPuzzle325() {
+        Pyramid pyramid = new Pyramid();
+        pyramid.put(Piece.H3, 0, 0);
+        pyramid.put(Piece.D1, 1, 0);
         return pyramid;
     }
 
